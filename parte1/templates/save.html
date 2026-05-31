@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Salvar Configuração{% endblock %}
+{% block content %}
+
+<div class="top-bar">
+  <a class="back-btn" href="/">&#8592; Voltar</a>
+  <div>
+    <h1>Salvar Configuração</h1>
+    <div class="subtitle">Grava a configuração atual na NVRAM do switch</div>
+  </div>
+</div>
+
+{% include "_connection.html" %}
+
+<div class="card" style="background:#0f2a1a;border-color:#166534;">
+  <div style="color:#86efac;font-size:.875rem;line-height:1.6;">
+    Esta operação executa <code style="background:#052e16;padding:.1rem .4rem;border-radius:4px;">write memory</code>
+    no switch, persistindo a configuração atual na NVRAM. Todas as mudanças feitas na sessão
+    atual serão mantidas após um reboot.
+  </div>
+</div>
+
+<button class="btn-submit" id="submit-btn" onclick="submit()">Salvar Configuração</button>
+
+<div class="result" id="result"></div>
+
+<script>
+  async function submit() {
+    const btn = document.getElementById("submit-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>&nbsp;Salvando...';
+
+    const payload = {
+      host: document.getElementById("host").value,
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value,
+      port: document.getElementById("port").value,
+      secret: document.getElementById("secret").value,
+    };
+
+    try {
+      const res = await fetch("/api/save-config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      renderResult(await res.json());
+    } catch (e) {
+      renderResult({ success: false, message: "Erro de comunicação com o servidor." });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Salvar Configuração";
+    }
+  }
+
+  function renderResult(data) {
+    const el = document.getElementById("result");
+    el.innerHTML = data.success
+      ? `<div class="result-box success"><div class="msg ok">${data.message}</div></div>`
+      : `<div class="result-box error"><div class="msg err">Erro</div>${data.message}</div>`;
+  }
+</script>
+{% endblock %}
