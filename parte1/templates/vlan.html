@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Configurar VLANs{% endblock %}
+{% block content %}
+
+<div class="top-bar">
+  <a class="back-btn" href="/">&#8592; Voltar</a>
+  <div>
+    <h1>Configurar VLANs</h1>
+    <div class="subtitle">Adicione as VLANs e aplique no switch</div>
+  </div>
+</div>
+
+{% include "_connection.html" %}
+
+<div class="card">
+  <div class="card-title">VLANs</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:110px">ID</th>
+        <th>Nome</th>
+        <th style="width:90px"></th>
+      </tr>
+    </thead>
+    <tbody id="vlan-table"></tbody>
+  </table>
+  <div style="margin-top:0.75rem">
+    <button class="btn btn-ghost" onclick="addRow()">+ Adicionar VLAN</button>
+  </div>
+</div>
+
+<button class="btn-submit" id="submit-btn" onclick="submit()">Aplicar VLANs</button>
+
+<div class="result" id="result"></div>
+
+<script>
+  function addRow(id = "", name = "") {
+    const tbody = document.getElementById("vlan-table");
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><input type="number" class="vlan-id" value="${id}" min="1" max="4094" placeholder="ex: 10" /></td>
+      <td><input type="text" class="vlan-name" value="${name}" placeholder="ex: VLAN_DADOS" /></td>
+      <td><button class="btn btn-danger" onclick="this.closest('tr').remove()">Remover</button></td>`;
+    tbody.appendChild(tr);
+  }
+
+  addRow();
+
+  async function submit() {
+    const btn = document.getElementById("submit-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>&nbsp;Configurando...';
+
+    const vlans = [];
+    document.querySelectorAll("#vlan-table tr").forEach(row => {
+      const id = parseInt(row.querySelector(".vlan-id").value);
+      const name = row.querySelector(".vlan-name").value.trim();
+      if (id && name) vlans.push({ id, name });
+    });
+
+    const payload = {
+      host: document.getElementById("host").value,
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value,
+      port: document.getElementById("port").value,
+      secret: document.getElementById("secret").value,
+      vlans,
+    };
+
+    try {
+      const res = await fetch("/api/configure-vlans", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      renderResult(await res.json());
+    } catch (e) {
+      renderResult({ success: false, message: "Erro de comunicação com o servidor." });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Aplicar VLANs";
+    }
+  }
+
+  function renderResult(data) {
+    const el = document.getElementById("result");
+    if (!data.success) {
+      el.innerHTML = `<div class="result-box error"><div class="msg err">Erro</div>${data.message}</div>`;
+      return;
+    }
+    const alerts = data.alerts && data.alerts.length
+      ? `<ul class="alert-list">${data.alerts.map(a => `<li>${a}</li>`).join("")}</ul>`
+      : `<div class="result-info" style="color:#4ade80">Nenhuma divergência encontrada.</div>`;
+    el.innerHTML = `
+      <div class="result-box ${data.alerts && data.alerts.length ? "warning" : "success"}">
+        <div class="msg ok">${data.message}</div>
+        <div style="margin-top:.6rem;font-size:.75rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em">Validação</div>
+        ${alerts}
+      </div>`;
+  }
+</script>
+{% endblock %}

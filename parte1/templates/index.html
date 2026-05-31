@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Switch Automation{% endblock %}
+{% block content %}
+<style>
+  .hero { margin-bottom: 2.5rem; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero p { color: #64748b; margin-top: 0.4rem; font-size: 0.9rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .action-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 0.15s, background 0.15s;
+    cursor: pointer;
+  }
+  .action-card:hover { border-color: #38bdf8; background: #1a2944; }
+  .action-card .icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+  .action-card .label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+  .action-card .desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
+  }
+</style>
+
+<div class="hero">
+  <h1>Switch Automation</h1>
+  <p>Automação de Switch Cisco via SSH</p>
+</div>
+
+<div class="grid">
+  <a class="action-card" href="/vlan">
+    <div class="icon">🔌</div>
+    <div class="label">Configurar VLANs</div>
+    <div class="desc">Adicione e aplique VLANs com ID e nome no switch.</div>
+  </a>
+  <a class="action-card" href="/hostname">
+    <div class="icon">🏷️</div>
+    <div class="label">Configurar Hostname</div>
+    <div class="desc">Defina o nome do switch na rede.</div>
+  </a>
+  <a class="action-card" href="/save">
+    <div class="icon">💾</div>
+    <div class="label">Salvar Configuração</div>
+    <div class="desc">Grava a configuração atual na NVRAM (write memory).</div>
+  </a>
+  <a class="action-card" href="/backup">
+    <div class="icon">📦</div>
+    <div class="label">Realizar Backup</div>
+    <div class="desc">Exporta o running-config para um arquivo local.</div>
+  </a>
+</div>
+{% endblock %}

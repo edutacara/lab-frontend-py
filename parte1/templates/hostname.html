@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Configurar Hostname{% endblock %}
+{% block content %}
+
+<div class="top-bar">
+  <a class="back-btn" href="/">&#8592; Voltar</a>
+  <div>
+    <h1>Configurar Hostname</h1>
+    <div class="subtitle">Define o nome do switch na rede</div>
+  </div>
+</div>
+
+{% include "_connection.html" %}
+
+<div class="card">
+  <div class="card-title">Hostname</div>
+  <div class="field">
+    <label>Nome do Switch</label>
+    <input type="text" id="hostname" placeholder="ex: SWITCH_CORE_01" />
+  </div>
+</div>
+
+<button class="btn-submit" id="submit-btn" onclick="submit()">Aplicar Hostname</button>
+
+<div class="result" id="result"></div>
+
+<script>
+  async function submit() {
+    const btn = document.getElementById("submit-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>&nbsp;Configurando...';
+
+    const payload = {
+      host: document.getElementById("host").value,
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value,
+      port: document.getElementById("port").value,
+      secret: document.getElementById("secret").value,
+      hostname: document.getElementById("hostname").value.trim(),
+    };
+
+    try {
+      const res = await fetch("/api/configure-hostname", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      renderResult(await res.json());
+    } catch (e) {
+      renderResult({ success: false, message: "Erro de comunicação com o servidor." });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Aplicar Hostname";
+    }
+  }
+
+  function renderResult(data) {
+    const el = document.getElementById("result");
+    if (!data.success) {
+      el.innerHTML = `<div class="result-box error"><div class="msg err">Erro</div>${data.message}</div>`;
+      return;
+    }
+    const alerts = data.alerts && data.alerts.length
+      ? `<ul class="alert-list">${data.alerts.map(a => `<li>${a}</li>`).join("")}</ul>`
+      : `<div class="result-info" style="color:#4ade80">Hostname validado com sucesso.</div>`;
+    el.innerHTML = `
+      <div class="result-box ${data.alerts && data.alerts.length ? "warning" : "success"}">
+        <div class="msg ok">${data.message}</div>
+        <div style="margin-top:.6rem;font-size:.75rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em">Validação</div>
+        ${alerts}
+      </div>`;
+  }
+</script>
+{% endblock %}

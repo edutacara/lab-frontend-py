@@ -1,0 +1,5 @@
+parte1/
+__pycache__/
+*.pyc
+backups/*.txt
+templates/save.html

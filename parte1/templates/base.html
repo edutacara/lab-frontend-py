@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Switch Automation{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .page {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.875rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .back-btn:hover { color: #e2e8f0; border-color: #475569; }
+    h1 { font-size: 1.5rem; color: #f1f5f9; }
+    .subtitle { color: #64748b; font-size: 0.875rem; margin-top: 0.2rem; }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field { display: flex; flex-direction: column; gap: 0.3rem; }
+    label { font-size: 0.8rem; color: #94a3b8; }
+    input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s;
+    }
+    input:focus { border-color: #38bdf8; }
+    input::placeholder { color: #475569; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th {
+      text-align: left;
+      color: #64748b;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid #334155;
+    }
+    td { padding: 0.35rem 0.4rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.45rem 1rem;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-ghost { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+    .btn-primary { background: #0284c7; color: #fff; }
+    .btn-danger { background: #7f1d1d; color: #fca5a5; }
+    .btn-submit {
+      width: 100%;
+      padding: 0.75rem;
+      background: #0284c7;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-submit:hover { background: #0369a1; }
+    .btn-submit:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+    .result { margin-top: 1.25rem; }
+    .result-box {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      border-left: 4px solid transparent;
+    }
+    .result-box.success { background: #052e16; border-color: #16a34a; }
+    .result-box.error   { background: #1c0a0a; border-color: #dc2626; }
+    .result-box.warning { background: #1c1407; border-color: #d97706; }
+    .result-box .msg { font-weight: 600; margin-bottom: 0.4rem; }
+    .result-box .msg.ok  { color: #4ade80; }
+    .result-box .msg.err { color: #f87171; }
+    .result-info { font-size: 0.825rem; color: #94a3b8; margin-top: 0.3rem; }
+    .alert-list { list-style: none; margin-top: 0.5rem; }
+    .alert-list li { color: #fbbf24; font-size: 0.85rem; padding: 0.15rem 0; }
+    .alert-list li::before { content: "⚠  "; }
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="page">
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

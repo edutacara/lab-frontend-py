@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Realizar Backup{% endblock %}
+{% block content %}
+
+<div class="top-bar">
+  <a class="back-btn" href="/">&#8592; Voltar</a>
+  <div>
+    <h1>Realizar Backup</h1>
+    <div class="subtitle">Exporta o running-config para um arquivo local</div>
+  </div>
+</div>
+
+{% include "_connection.html" %}
+
+<div class="card" style="background:#0c1a2e;border-color:#1e3a5f;">
+  <div style="color:#93c5fd;font-size:.875rem;line-height:1.6;">
+    O backup será salvo na pasta <code style="background:#0f172a;padding:.1rem .4rem;border-radius:4px;">backups/</code>
+    com o nome no formato <code style="background:#0f172a;padding:.1rem .4rem;border-radius:4px;">&lt;hostname&gt;_&lt;YYYYMMDD_HHMMSS&gt;.txt</code>.
+  </div>
+</div>
+
+<button class="btn-submit" id="submit-btn" onclick="submit()">Realizar Backup</button>
+
+<div class="result" id="result"></div>
+
+<script>
+  async function submit() {
+    const btn = document.getElementById("submit-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>&nbsp;Realizando backup...';
+
+    const payload = {
+      host: document.getElementById("host").value,
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value,
+      port: document.getElementById("port").value,
+      secret: document.getElementById("secret").value,
+    };
+
+    try {
+      const res = await fetch("/api/backup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      renderResult(await res.json());
+    } catch (e) {
+      renderResult({ success: false, message: "Erro de comunicação com o servidor." });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Realizar Backup";
+    }
+  }
+
+  function renderResult(data) {
+    const el = document.getElementById("result");
+    if (!data.success) {
+      el.innerHTML = `<div class="result-box error"><div class="msg err">Erro</div>${data.message}</div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div class="result-box success">
+        <div class="msg ok">${data.message}</div>
+        <div class="result-info">Arquivo: <code style="background:#0f172a;padding:.1rem .4rem;border-radius:4px;">${data.backup_file}</code></div>
+      </div>`;
+  }
+</script>
+{% endblock %}
