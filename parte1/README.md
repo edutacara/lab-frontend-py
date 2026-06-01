@@ -85,5 +85,11 @@ parte1/
 │   ├── hostname.html       # Configuração de hostname
 │   ├── save.html           # Salvar configuração
 │   └── backup.html         # Realizar backup
+├── images/                 # Screenshots do frontend
+│   ├── frontend.jpg
+│   ├── configure_vlan.jpg
+│   ├── configure_hostname.jpg
+│   ├── save_config.jpg
+│   └── execute backup.jpg
 └── backups/                # Arquivos de backup gerados automaticamente
 ```
