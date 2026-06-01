@@ -2,6 +2,14 @@
 
 Automação de switch Cisco via SSH com interface web (Flask) para configuração de VLANs, hostname, salvamento e backup de configuração.
 
+## Screenshots
+
+![Menu Principal](images/frontend.jpg)
+![Configurar VLANs](images/configure_vlan.jpg)
+![Configurar Hostname](images/configure_hostname.jpg)
+![Salvar Configuração](images/save_config.jpg)
+![Realizar Backup](images/execute%20backup.jpg)
+
 ## Visão Geral
 
 Interface web com quatro funções independentes:
