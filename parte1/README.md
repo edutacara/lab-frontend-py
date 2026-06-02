@@ -7,8 +7,11 @@ Automação de switch Cisco via SSH com interface web (Flask) para configuraçã
 ![Menu Principal](images/frontend.jpg)
 ![Configurar VLANs](images/configure_vlan.jpg)
 ![Configurar Hostname](images/configure_hostname.jpg)
+![Hostname Configurado com Sucesso](images/configure_hostaname_sucess.jpg)
 ![Salvar Configuração](images/save_config.jpg)
 ![Realizar Backup](images/execute%20backup.jpg)
+![Alerta de Divergência — VLAN](images/alert_vlan.jpg)
+![Alerta de Divergência — Hostname](images/alert_hostname.jpg)
 
 ## Visão Geral
 
