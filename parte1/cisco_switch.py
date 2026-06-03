@@ -1,6 +1,12 @@
 from netmiko import ConnectHandler
 from datetime import datetime
+import unicodedata
 import os
+
+
+def _ascii_safe(name: str) -> str:
+    """Normalize VLAN names to ASCII — Cisco IOS rejects non-ASCII characters."""
+    return unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
 
 
 class CiscoSwitch:
@@ -30,7 +36,8 @@ class CiscoSwitch:
     def configure_vlans(self, vlans):
         commands = []
         for vlan in vlans:
-            commands += [f"vlan {vlan['id']}", f"name {vlan['name']}", "exit"]
+            safe_name = _ascii_safe(vlan["name"])
+            commands += [f"vlan {vlan['id']}", f"name {safe_name}", "exit"]
         self.connection.send_config_set(commands)
 
     def save_config(self):
